@@ -14,6 +14,10 @@
 #include <soc/soc_caps.h>
 #include <soc/adc_channel.h>
 
+#if defined(CONFIG_IDF_TARGET_ESP32P4)
+#include <driver/rtc_io.h>
+#endif
+
 #if __has_include (<esp_idf_version.h>)
  #include <esp_idf_version.h>
  #if ESP_IDF_VERSION_MAJOR >= 4
@@ -699,7 +703,13 @@ namespace m5
     if (withTimer && _rtcIntPin < GPIO_NUM_MAX)
     {
       gpio_num_t pin = (gpio_num_t)_rtcIntPin;
-#if SOC_PM_SUPPORT_EXT_WAKEUP
+#if defined(CONFIG_IDF_TARGET_ESP32P4)
+      // ESP32-P4 doesn't support EXT0 wakeup, use EXT1 instead
+      rtc_gpio_init(pin);
+      rtc_gpio_set_direction(pin, RTC_GPIO_MODE_INPUT_ONLY);
+      rtc_gpio_pullup_en(pin);
+      if (ESP_OK != esp_sleep_enable_ext1_wakeup(1ULL << pin, ESP_EXT1_WAKEUP_ANY_LOW))
+#elif SOC_PM_SUPPORT_EXT_WAKEUP
       if (ESP_OK != esp_sleep_enable_ext0_wakeup( pin, false))
 #endif
       {
@@ -734,7 +744,16 @@ namespace m5
 
       case pmic_t::pmic_unknown:
       default:
-#if SOC_PM_SUPPORT_EXT_WAKEUP
+#if defined(CONFIG_IDF_TARGET_ESP32P4)
+        if(_rtcIntPin == GPIO_NUM_MAX && _wakeupPin < GPIO_NUM_MAX)
+        {
+          // ESP32-P4 uses EXT1 wakeup instead of EXT0
+          rtc_gpio_init((gpio_num_t)_wakeupPin);
+          rtc_gpio_set_direction((gpio_num_t)_wakeupPin, RTC_GPIO_MODE_INPUT_ONLY);
+          rtc_gpio_pullup_en((gpio_num_t)_wakeupPin);
+          esp_sleep_enable_ext1_wakeup(1ULL << _wakeupPin, ESP_EXT1_WAKEUP_ANY_LOW);
+        }
+#elif SOC_PM_SUPPORT_EXT_WAKEUP
         if(_rtcIntPin == GPIO_NUM_MAX && _wakeupPin < GPIO_NUM_MAX)
         {
           esp_sleep_enable_ext0_wakeup((gpio_num_t)_wakeupPin, false);
@@ -772,7 +791,8 @@ namespace m5
     M5.Display.sleep();
     M5.Display.waitDisplay();
 
-#if !defined (CONFIG_IDF_TARGET) || defined (CONFIG_IDF_TARGET_ESP32)
+#if !defined (CONFIG_IDF_TARGET_ESP32P4)
+    // ESP32-P4 Tab5 doesn't use legacy board-specific sleep methods
     switch (M5.getBoard())
     {
     case board_t::board_M5StickC:
@@ -819,7 +839,15 @@ namespace m5
     uint_fast8_t wpin = _wakeupPin;
     if (touch_wakeup && wpin < GPIO_NUM_MAX)
     {
+#if defined(CONFIG_IDF_TARGET_ESP32P4)
+      // ESP32-P4 uses EXT1 wakeup instead of EXT0
+      rtc_gpio_init((gpio_num_t)wpin);
+      rtc_gpio_set_direction((gpio_num_t)wpin, RTC_GPIO_MODE_INPUT_ONLY);
+      rtc_gpio_pullup_en((gpio_num_t)wpin);
+      esp_sleep_enable_ext1_wakeup(1ULL << wpin, ESP_EXT1_WAKEUP_ANY_LOW);
+#else
       esp_sleep_enable_ext0_wakeup((gpio_num_t)wpin, false);
+#endif
       while (m5gfx::gpio_in(wpin) == false)
       {
         // Issue #91, ( M5Paper wakes too soon from deep sleep when touch wakeup is enabled - with solution )
@@ -861,7 +889,15 @@ namespace m5
     uint_fast8_t wpin = _wakeupPin;
     if (touch_wakeup && wpin < GPIO_NUM_MAX)
     {
+#if defined(CONFIG_IDF_TARGET_ESP32P4)
+      // ESP32-P4 uses EXT1 wakeup instead of EXT0
+      rtc_gpio_init((gpio_num_t)wpin);
+      rtc_gpio_set_direction((gpio_num_t)wpin, RTC_GPIO_MODE_INPUT_ONLY);
+      rtc_gpio_pullup_en((gpio_num_t)wpin);
+      esp_sleep_enable_ext1_wakeup(1ULL << wpin, ESP_EXT1_WAKEUP_ANY_LOW);
+#else
       esp_sleep_enable_ext0_wakeup((gpio_num_t)wpin, false);
+#endif
       esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_AUTO);
       while (m5gfx::gpio_in(wpin) == false)
       {

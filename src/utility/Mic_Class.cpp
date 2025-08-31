@@ -16,6 +16,13 @@
 #include <soc/pcr_struct.h>
 #endif
 
+#if defined(CONFIG_IDF_TARGET_ESP32P4)
+#include <driver/i2s_pdm.h>
+#include <driver/i2s_std.h>
+#else
+// Legacy I2S for other ESP32 chips
+#endif
+
 #ifndef NON_BREAK
 #define NON_BREAK ;
 #endif

@@ -1,14 +1,14 @@
 {
-  "name": "M5Unified",
-  "description": "Library for M5Stack/Core2/Tough/CoreS3/CoreS3SE, M5StickC/C-Plus/C-Plus2, M5CoreInk, M5Paper, M5ATOM, M5STAMP, M5Station, M5Dial, M5DinMeter, M5Capsule, M5Cardputer, M5VAMeter",
-  "keywords": "M5Unified",
+  "name": "M5Unified-ESP32P4",
+  "description": "ESP32-P4 optimized M5Unified library specifically for M5Stack Tab5 with enhanced GPIO, I2S, and Power Management support",
+  "keywords": "M5Unified, ESP32-P4, M5Tab5, ESP32P4",
   "authors": {
-    "name": "M5Stack, lovyan03",
+    "name": "M5Stack, lovyan03 - ESP32-P4 Fork",
     "url": "http://www.m5stack.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/m5stack/M5Unified.git"
+    "url": "https://github.com/m5stack/M5Unified-ESP32P4.git"
   },
   "dependencies": [
     {
@@ -16,8 +16,23 @@
       "version": ">=0.2.8"
     }
   ],
-  "version": "0.2.7",
-  "frameworks": ["arduino", "espidf", "*"],
-  "platforms": ["espressif32", "native"],
-  "headers": "M5Unified.h"
+  "version": "0.3.0-esp32p4",
+  "frameworks": ["arduino", "espidf"],
+  "platforms": ["espressif32"],
+  "headers": "M5Unified.h",
+  "build": {
+    "flags": [
+      "-DCONFIG_IDF_TARGET_ESP32P4=1",
+      "-DM5UNIFIED_ESP32P4_ONLY=1",
+      "-DBOARD_HAS_PSRAM=1",
+      "-DARDUINO_M5TAB5=1"
+    ],
+    "unflags": [
+      "-DCONFIG_IDF_TARGET_ESP32",
+      "-DCONFIG_IDF_TARGET_ESP32S2",
+      "-DCONFIG_IDF_TARGET_ESP32S3",
+      "-DCONFIG_IDF_TARGET_ESP32C3",
+      "-DCONFIG_IDF_TARGET_ESP32C6"
+    ]
+  }
 }

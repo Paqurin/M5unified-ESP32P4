@@ -4,6 +4,15 @@
 #ifndef __M5UNIFIED_HPP__
 #define __M5UNIFIED_HPP__
 
+// M5Unified-ESP32P4: ESP32-P4 optimized version for M5Stack Tab5
+#ifndef M5UNIFIED_ESP32P4_ONLY
+#define M5UNIFIED_ESP32P4_ONLY 1
+#endif
+
+#ifndef CONFIG_IDF_TARGET_ESP32P4
+#error "This M5Unified-ESP32P4 library is designed specifically for ESP32-P4 targets only"
+#endif
+
 #include "utility/m5unified_common.h"
 
 #if __has_include(<sdkconfig.h>)
@@ -152,18 +161,8 @@ namespace m5
       uint8_t led_brightness = 0;
 
       /// If auto-detection fails, the board will operate as the board configured here.
-      board_t fallback_board
-#if defined (CONFIG_IDF_TARGET_ESP32S3)
-                             = board_t::board_M5AtomS3Lite;
-#elif defined (CONFIG_IDF_TARGET_ESP32C3)
-                             = board_t::board_M5StampC3;
-#elif defined (CONFIG_IDF_TARGET_ESP32P4)
-                             = board_t::board_M5Tab5;
-#elif defined (CONFIG_IDF_TARGET_ESP32) || !defined (CONFIG_IDF_TARGET)
-                             = board_t::board_M5AtomLite;
-#else
-                             = board_t::board_unknown;
-#endif
+      /// ESP32-P4 version: Only Tab5 is supported
+      board_t fallback_board = board_t::board_M5Tab5;
 
       union
       {
