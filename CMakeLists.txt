@@ -25,11 +25,11 @@ idf_component_register(
         log
         nvs_flash
     PRIV_REQUIRES
-        esp_driver_ledc
+        esp_adc
 )
 
 # Add ESP32-P4 specific compile definitions AFTER component registration
-target_compile_definitions(${COMPONENT_LIB} PUBLIC
+target_compile_definitions(${COMPONENT_TARGET} PUBLIC
     CONFIG_IDF_TARGET_ESP32P4=1
     M5UNIFIED_ESP32P4_ONLY=1
     BOARD_HAS_PSRAM=1
@@ -37,7 +37,7 @@ target_compile_definitions(${COMPONENT_LIB} PUBLIC
 )
 
 # Set C++ standard for component
-target_compile_features(${COMPONENT_LIB} PUBLIC cxx_std_17)
+target_compile_features(${COMPONENT_TARGET} PUBLIC cxx_std_17)
 
 message(STATUS "M5Unified-ESP32P4 component registered successfully")
 
