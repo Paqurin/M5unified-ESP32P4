@@ -53,6 +53,9 @@ lib_deps/
 *.swo
 *~
 
+# Claude Code configuration
+.claude/
+
 # OS specific
 .DS_Store
 .DS_Store?

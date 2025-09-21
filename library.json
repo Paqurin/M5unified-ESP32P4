@@ -1,23 +1,18 @@
 {
   "name": "M5Unified-ESP32P4",
-  "description": "ESP32-P4 optimized M5Unified library specifically for M5Stack Tab5 with enhanced GPIO, I2S, and Power Management support",
-  "keywords": "M5Unified, ESP32-P4, M5Tab5, ESP32P4",
+  "description": "M5Unified library optimized for ESP32-P4 and M5Stack Tab5 with ESP-IDF 5.4.1 compatibility and native ESP-IDF RTC support",
+  "keywords": "M5Unified, ESP32-P4, M5Tab5, ESP32P4, ESP-IDF, native",
   "authors": {
-    "name": "M5Stack, lovyan03 - ESP32-P4 Fork",
+    "name": "M5Stack, lovyan03 - ESP32-P4 Fork, Paqurin - ESP-IDF 5.4.1 Modernization",
     "url": "http://www.m5stack.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/m5stack/M5Unified-ESP32P4.git"
+    "url": "https://github.com/Paqurin/M5unified-ESP32P4.git"
   },
-  "dependencies": [
-    {
-      "name": "M5GFX",
-      "version": ">=0.2.8"
-    }
-  ],
-  "version": "0.3.0-esp32p4",
-  "frameworks": ["arduino", "espidf"],
+  "dependencies": [],
+  "version": "1.1.0-esp32p4",
+  "frameworks": ["espidf"],
   "platforms": ["espressif32"],
   "headers": "M5Unified.h",
   "build": {

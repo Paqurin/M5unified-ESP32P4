@@ -1,0 +1,17 @@
+## IDF Component Manager Manifest File
+version: "1.1.0"
+description: "M5Unified library optimized for ESP32-P4 and M5Stack Tab5"
+url: "https://github.com/Paqurin/M5unified-ESP32P4"
+documentation: "https://github.com/Paqurin/M5unified-ESP32P4/blob/main/README_ESP32P4.md"
+
+dependencies:
+  idf: ">=5.3"
+  # M5GFX-Tab5 fork for ESP32-P4 compatibility
+  M5GFX:
+    git: "https://github.com/Paqurin/M5GFX-Tab5.git"
+
+targets:
+  - esp32p4
+
+maintainers:
+  - "Paqurin <your-email@domain.com>"

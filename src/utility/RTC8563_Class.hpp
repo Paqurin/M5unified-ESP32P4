@@ -5,8 +5,7 @@
 #define __M5_RTC8563_CLASS_H__
 
 #include "m5unified_common.h"
-
-#include "I2C_Class.hpp"
+#include "rtc_esp32p4.h"
 
 #if __has_include(<sys/time.h>)
 #include <sys/time.h>
@@ -77,16 +76,22 @@ namespace m5
     void set_tm(tm* t) { if (t) set_tm(*t); }
   };
 
-  class RTC8563_Class : public I2C_Device
+  class RTC8563_Class
   {
   public:
     static constexpr std::uint8_t DEFAULT_ADDRESS = 0x51;
 
-    RTC8563_Class(std::uint8_t i2c_addr = DEFAULT_ADDRESS, std::uint32_t freq = 400000, I2C_Class* i2c = &In_I2C)
-    : I2C_Device ( i2c_addr, freq, i2c )
-    {}
+    RTC8563_Class(std::uint8_t i2c_addr = DEFAULT_ADDRESS, std::uint32_t freq = 400000, I2C_Class* i2c = nullptr)
+    {
+      (void)i2c_addr; (void)freq; (void)i2c; // Suppress unused parameter warnings
+    }
 
     bool begin(I2C_Class* i2c = nullptr);
+
+  private:
+    bool _init = false;
+
+  public:
 
     bool getVoltLow(void);
 
@@ -100,7 +105,7 @@ namespace m5
     void setDate(const rtc_date_t &date);
     void setDate(const rtc_date_t* const date) { if (date) { setDate(*date); } }
 
-    void setDateTime(const rtc_datetime_t &datetime) { setDate(datetime.date); setTime(datetime.time); }
+    void setDateTime(const rtc_datetime_t &datetime);
     void setDateTime(const rtc_datetime_t* const datetime) { if (datetime) { setDateTime(*datetime); } }
     void setDateTime(const tm* const datetime)
     {
