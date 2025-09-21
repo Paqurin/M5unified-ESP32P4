@@ -6,6 +6,7 @@
 
 #include "m5unified_common.h"
 #include "rtc_esp32p4.h"
+#include "I2C_Class.hpp"
 
 #if __has_include(<sys/time.h>)
 #include <sys/time.h>
