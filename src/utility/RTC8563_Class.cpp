@@ -71,6 +71,11 @@ namespace m5
     return _init;
   }
 
+  bool RTC8563_Class::isEnabled(void) const
+  {
+    return _init;
+  }
+
   bool RTC8563_Class::getVoltLow(void)
   {
     // For native ESP-IDF implementation, assume power is always OK

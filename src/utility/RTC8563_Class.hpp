@@ -88,6 +88,7 @@ namespace m5
     }
 
     bool begin(I2C_Class* i2c = nullptr);
+    bool isEnabled(void) const;
 
   private:
     bool _init = false;
